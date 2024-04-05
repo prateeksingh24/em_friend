@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyCFWZCo3vNa2f3qKiiDwDvXnRJrAheJui0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>263981879460</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.wipeduck.emFriend</string>
+	<key>PROJECT_ID</key>
+	<string>em-friend</string>
+	<key>STORAGE_BUCKET</key>
+	<string>em-friend.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:263981879460:ios:372f0ad50f45b5d1ed5631</string>
+</dict>
+</plist>

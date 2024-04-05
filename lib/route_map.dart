@@ -1,12 +1,14 @@
+import 'package:em_friend/latlngz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 import 'dart:convert';
+import 'package:em_friend/latlngz.dart' as latlat;
 
-import 'package:smart_delivery/flexible_polyline.dart';
-import 'package:smart_delivery/latlngz.dart' as latlat;
+import 'flexible_polyline.dart';
+
 
 // Sustainable Food Delivery Optimization: Build a solution (website or mobile app) that optimizes food delivery routes for local restaurants using HERE Routing APIs and Mobile SDKs while minimizing environmental impact.
 
@@ -17,11 +19,71 @@ class MyApp11 extends StatefulWidget {
 
 class _MyApp11State extends State<MyApp11> {
   List<Marker> _marker = [];
+
+  final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _searchResults = [];
   final GlobalKey _markerLayerKey = GlobalKey();
   late MapController _mapController;
   LatLng? camera_center = null;
   double camera_zoom_level = 12.5;
   int count = 0;
+  bool searchCond = false;
+
+
+  String _cityName = '';
+  String _latitude = '';
+  String _longitude = '';
+
+  void _searchPlace(String query) async {
+    final String apiKey = 'd_ag3Uo2tkXDKu4yXHAHMX5L-YsiYlhswXAYd6M6fUo';
+    final String baseUrl =
+        'https://discover.search.hereapi.com/v1/discover?at=25.05230661095756,75.8282113815214&limit=2&q=$query&apiKey=$apiKey';
+    final String altUrl = "https://geocode.search.hereapi.com/v1/geocode?q=City+Mall&apiKey=$apiKey";
+    final response = await http.get(Uri.parse(baseUrl));
+    final data = jsonDecode(response.body);
+    print(data);
+    // if (response.statusCode == 200) {
+    //   final data = jsonDecode(response.body);
+    //   print(data);
+    //   // final lat = data['location']['lat'];
+    //   // final lon = data['location']['lng'];
+    //   // print('Latitude: $lat, Longitude: $lon');
+    // } else {
+    //   print('Failed to get live location: ${response.statusCode}');
+    // }
+
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> items = data['items'];
+
+      setState(() {
+        _searchResults = items.map<Map<String, dynamic>>((item) {
+          return {
+            'title': item['title'],
+            'address': {
+              'label': item['address']['label'],
+              'countryCode': item['address']['countryCode'],
+              // Example: Include additional data if needed
+              // Add more fields as needed
+            },
+            'position': {
+              'lat': item['position']['lat'],
+              'lng': item['position']['lng'],
+            },
+            // Add more fields as needed
+          };
+        }).toList();
+      });
+    } else {
+      throw Exception('Failed to load search results');
+    }
+  }
+
+
+
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -156,26 +218,48 @@ class _MyApp11State extends State<MyApp11> {
                   left: 0,
                   right: 0,
                   top: 0,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    padding: EdgeInsets.all(5),
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(244, 243, 243, 1),
-                        borderRadius: BorderRadius.circular(15)),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.black87,
-                        ),
-                        hintText: 'Search you\'re looking for',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 15,
-                        ),
+                  child: Opacity(
+                    opacity: 0.2,
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: EdgeInsets.all(5),
+                      height: searchCond ? 200 : 75,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(244, 243, 243, 1),
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              labelText: 'Search for a place',
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () {
+                                  setState(() {
+                                    _searchPlace(_searchController.text);
+                                    searchCond = true;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child:  ListView.builder(
+                              itemCount: _searchResults.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final Map<String, dynamic> place = _searchResults[index];
+                                return ListTile(
+                                  title: Text(place['title'] ?? 'Unknown Title'),
+                                  // subtitle: Text(place['address']['label'] ?? 'Unknown Address'),
+                                  subtitle: Text("Lat : " + place['position']['lat'].toString()+" Long : "+place['position']['lng'].toString()),
+
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -251,4 +335,33 @@ class _MyApp11State extends State<MyApp11> {
       print('Failed to get live location: ${response.statusCode}');
     }
   }
+
+
+
+
+  // Future<void> searchCity(String cityName) async {
+  //   final String apiKey= 'd_ag3Uo2tkXDKu4yXHAHMX5L-YsiYlhswXAYd6M6fUo';
+  //   final String baseUrl =
+  //       'https://discover.search.hereapi.com/v1/discover?at=25.05230661095756,75.8282113815214&limit=2&q=$cityName&apiKey=$apiKey';
+  //
+  //   final response = await http.get(Uri.parse(baseUrl));
+  //   final data = jsonDecode(response.body);
+  //   print(data);
+  //   if (response.statusCode == 200) {
+  //     final List<dynamic> items = data['items'];
+  //     if (items.isNotEmpty) {
+  //       final dynamic location = items[0]['position'];
+  //       setState(() {
+  //         _cityName = cityName;
+  //         _latitude = location['lat'].toString();
+  //         _longitude = location['lng'].toString();
+  //       });
+  //     } else {
+  //       throw Exception('City not found');
+  //     }
+  //   } else {
+  //     throw Exception('Failed to load city');
+  //   }
+  // }
+
 }

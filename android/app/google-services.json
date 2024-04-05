@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "263981879460",
+    "project_id": "em-friend",
+    "storage_bucket": "em-friend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:263981879460:android:952925235f1c3bd6ed5631",
+        "android_client_info": {
+          "package_name": "com.wipeduck.em_friend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvYrrPjLhFwv_A0U3zdMTFNa4HqtGa05s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
