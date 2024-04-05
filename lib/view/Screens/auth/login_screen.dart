@@ -1,3 +1,4 @@
+import 'package:em_friend/modals/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Controller/widgets/objects/authField.dart';
@@ -7,7 +8,6 @@ import '../../../Controller/widgets/objects/remeberCheckBox.dart';
 import '../../../Controller/widgets/objects/socialButton.dart';
 import '../../../Controller/widgets/utils/AppAssets.dart';
 import '../../../Controller/widgets/utils/AppColor.dart';
-
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.kLightWhite,
       body: SingleChildScrollView(
@@ -119,17 +118,26 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 10,
               ),
               PrimaryButton(
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate() && !isLoading) {
                     // Form is valid, perform the 'Sign In' logic here
                     setState(() {
                       isLoading = true;
                     });
-                    Future.delayed(Duration(seconds:2 ),(){
+                    final response = await Authenticate()
+                        .login(_mailController.text, _passwordController.text);
+
+                    Future.delayed(Duration(seconds: 2), () {
                       setState(() {
                         isLoading = false;
-                        Navigator.pushNamed(context, '/home');
-                        print("Sign In Completed");
+
+                        if (response == "success") {
+                          Navigator.pushNamed(context, '/home');
+                          print("Sign In Completed");
+                        } else {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          SnackBar(content: Text(response));
+                        }
                       });
                     });
                   }
@@ -146,13 +154,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500
-
-                    ),
+                        fontWeight: FontWeight.w500),
                   ),
                   const Spacer(),
                   PrimaryButton(
-                    onTap: () => Navigator.pushNamed(context,'/signUpScreen'),
+                    onTap: () => Navigator.pushNamed(context, '/signUpScreen'),
                     text: 'Sign Up',
                     width: 70,
                     height: 30,
@@ -163,7 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(
-
                 height: 40,
               ),
               Row(
@@ -183,7 +188,6 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
-
 
 bool _isValidEmail(String email) {
   // Regular expression for a basic email validation
@@ -209,4 +213,3 @@ bool _isPasswordStrong(String password) {
   }
   return true;
 }
-

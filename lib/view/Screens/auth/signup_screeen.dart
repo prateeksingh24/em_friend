@@ -1,3 +1,4 @@
+import 'package:em_friend/modals/auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Controller/widgets/objects/authField.dart';
@@ -122,24 +123,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(
                 height: 70,
               ),
-
               PrimaryButton(
-                onTap: () {
+                onTap: () async {
                   if (_formKey.currentState!.validate() && !isLoading) {
                     // Form is valid, perform the 'Sign Up' logic here
                     setState(() {
                       isLoading = true;
                     });
-                    Future.delayed(Duration(seconds:2 ),(){
+                    final response = await Authenticate()
+                        .signUp(_mailController.text, _passwordController.text);
+                    Future.delayed(Duration(seconds: 2), () {
                       setState(() {
                         isLoading = false;
-                        Navigator.pushNamed(context, '/home');
-                        print("Sign Up Completed");
+                        if (response == "success") {
+                          Navigator.pushNamed(context, '/home');
+                          print("Sign Up Completed");
+                        } else {
+                          ScaffoldMessenger.of(context).clearSnackBars();
+                          SnackBar(content: Text(response));
+                        }
                       });
                     });
                   }
                 },
-                text:  isLoading ? 'Signing Up...' :"Sign Up",
+                text: isLoading ? 'Signing Up...' : "Sign Up",
               ),
               const SizedBox(
                 height: 20,
@@ -151,9 +158,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 14,
-                        fontWeight: FontWeight.w500
-
-                    ),
+                        fontWeight: FontWeight.w500),
                   ),
                   const Spacer(),
                   PrimaryButton(
@@ -188,7 +193,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
-}bool _isValidEmail(String email) {
+}
+
+bool _isValidEmail(String email) {
   // Regular expression for a basic email validation
   final RegExp emailRegExp = RegExp(
     r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$',
@@ -212,4 +219,3 @@ bool _isPasswordStrong(String password) {
   }
   return true;
 }
-
