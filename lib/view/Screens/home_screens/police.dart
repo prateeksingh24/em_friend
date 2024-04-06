@@ -134,7 +134,7 @@ class _PoliceOptionState extends State<PoliceOption> {
             padding: EdgeInsets.all(10),
             margin: EdgeInsets.symmetric(horizontal: 10),
 
-            height: 80,
+            height: 90,
             decoration: BoxDecoration(
               color: Colors.redAccent,
               borderRadius: BorderRadius.circular(10),

@@ -1,3 +1,4 @@
+import 'package:em_friend/view/Screens/home_screens/police.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -77,25 +78,30 @@ class _HomePageState extends State<HomePage> {
           crossAxisCount: 2,
           padding: EdgeInsets.all(10),
           children: List.generate(4, (index) {
-            return Container(
-              padding: const EdgeInsets.all(30),
-              margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                children: [
-                  Image.asset(
-                    img[index],
-                    width: 50,
-                    height: 50,
-                  ),
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(emergencies[index]),
-                ],
+            return GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>PoliceOption()));
+              },
+              child: Container(
+                padding: const EdgeInsets.all(30),
+                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  children: [
+                    Image.asset(
+                      img[index],
+                      width: 50,
+                      height: 50,
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Text(emergencies[index]),
+                  ],
+                ),
               ),
             );
           }),

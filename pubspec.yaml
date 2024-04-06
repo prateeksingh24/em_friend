@@ -53,6 +53,7 @@ dependencies:
   permission_handler: ^11.3.1
   flutter_local_notifications: ^17.0.0
   vibration: ^1.8.4
+  intro_screen_onboarding_flutter: ^1.0.0
 
 dev_dependencies:
   flutter_test:
