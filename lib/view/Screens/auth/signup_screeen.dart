@@ -1,4 +1,6 @@
 import 'package:em_friend/modals/auth.dart';
+import 'package:em_friend/utilities/live_location.dart';
+import 'package:em_friend/utilities/push_notification.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Controller/widgets/objects/authField.dart';
@@ -132,17 +134,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     });
                     final response = await Authenticate()
                         .signUp(_mailController.text, _passwordController.text);
-                    Future.delayed(Duration(seconds: 2), () {
-                      setState(() {
-                        isLoading = false;
-                        if (response == "success") {
-                          Navigator.pushNamed(context, '/home');
-                          print("Sign Up Completed");
-                        } else {
-                          ScaffoldMessenger.of(context).clearSnackBars();
-                          SnackBar(content: Text(response));
-                        }
-                      });
+                    await LiveLocation().requestPermission();
+                    
+                    setState(() {
+                      isLoading = false;
+                      if (response == "success") {
+                        Navigator.pushNamed(context, '/infoForm');
+
+                        print("Sign Up Completed");
+                      } else {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        SnackBar(content: Text(response));
+                      }
                     });
                   }
                 },
@@ -163,7 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   const Spacer(),
                   PrimaryButton(
                     onTap: () {
-                      Navigator.pushNamed(context, '/login_page');
+                      Navigator.pushNamed(context, '/loginScreen');
                     },
                     text: 'Sign In',
                     width: 70,

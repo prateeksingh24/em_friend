@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:em_friend/flexible_polyline.dart';
+import 'package:em_friend/dependency/flexible_polyline.dart';
 import 'package:tuple/tuple.dart';
 
 ///

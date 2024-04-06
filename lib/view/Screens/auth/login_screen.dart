@@ -1,5 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:em_friend/modals/auth.dart';
+import 'package:em_friend/modals/general_info.dart';
+import 'package:em_friend/utilities/live_location.dart';
+import 'package:em_friend/utilities/push_notification.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../../../Controller/widgets/objects/authField.dart';
 import '../../../Controller/widgets/objects/customTextButton.dart';
@@ -24,6 +30,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final _firestore = FirebaseFirestore.instance;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.kLightWhite,
@@ -124,21 +132,30 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       isLoading = true;
                     });
+                    await LiveLocation().requestPermission();
+                    Position _position =
+                        await LiveLocation().getCurrentLocation();
+                    String token =
+                        await PushNotification().setupPopNotifications();
+
+                    await PushGI().GIupdate(_position, token);
+
                     final response = await Authenticate()
                         .login(_mailController.text, _passwordController.text);
+                    await LiveLocation().requestPermission();
+                    await PushNotification().setupPopNotifications();
 
-                    Future.delayed(Duration(seconds: 2), () {
-                      setState(() {
-                        isLoading = false;
+                    setState(() {
+                      isLoading = false;
 
-                        if (response == "success") {
-                          Navigator.pushNamed(context, '/home');
-                          print("Sign In Completed");
-                        } else {
-                          ScaffoldMessenger.of(context).clearSnackBars();
-                          SnackBar(content: Text(response));
-                        }
-                      });
+                      if (response == "success") {
+                        Navigator.pushNamed(context, '/home');
+
+                        print("Sign In Completed");
+                      } else {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        SnackBar(content: Text(response));
+                      }
                     });
                   }
                 },
