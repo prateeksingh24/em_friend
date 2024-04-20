@@ -159,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     });
                   }
                 },
-                text: isLoading ? 'Signing In...' : 'Sign In',
+                text: isLoading ? 'Signing In..' : 'Sign In',
               ),
               const SizedBox(
                 height: 20,
