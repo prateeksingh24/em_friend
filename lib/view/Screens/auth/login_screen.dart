@@ -5,6 +5,7 @@ import 'package:em_friend/utilities/live_location.dart';
 import 'package:em_friend/utilities/push_notification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../../../Controller/widgets/objects/authField.dart';
@@ -68,38 +69,72 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 90,
               ),
               AuthField(
-                  controller: _mailController,
-                  keyboardType: TextInputType.emailAddress,
-                  icon: AppAssets.kMail,
-                  iconColor: AppColors.kLavender,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your email address';
-                    } else if (!_isValidEmail(value)) {
-                      return 'Please enter a valid email address';
-                    }
+                controller: _mailController,
+                keyboardType: TextInputType.emailAddress,
+                icon: AppAssets.kMail,
+                iconColor: AppColors.kLavender,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your email address';
+                  } else if (!_isValidEmail(value)) {
+                    return 'Please enter a valid email address';
+                  }
 
-                    return null;
-                  },
-                  hintText: 'Email Address'),
-              const SizedBox(
+                  return null;
+                },
+                hintText: 'Email Address',
+              ),
+              SizedBox(
                 height: 10,
               ),
-              AuthField(
-                  controller: _passwordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  icon: AppAssets.kLock,
-                  iconColor: AppColors.kPeriwinkle,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a password';
-                    }
-                    if (!_isPasswordStrong(value)) {
-                      return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.';
-                    }
-                    return null;
-                  },
-                  hintText: 'Password'),
+              TextFormField(
+                obscureText: true,
+                cursorColor: Colors.grey,
+                controller: _passwordController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  if (!_isPasswordStrong(value)) {
+                    return 'Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one digit.';
+                  }
+                  return null;
+                },
+                style: const TextStyle(fontSize: 14, color: Colors.black),
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                  ),
+                  fillColor: AppColors.kLightWhite2,
+                  filled: true,
+                  errorMaxLines: 3,
+                  prefixIcon: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Container(
+                      height: 35,
+                      width: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: AppColors.kPeriwinkle),
+                      child: SvgPicture.asset(AppAssets.kLock),
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kPeriwinkle),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.kPeriwinkle),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue),
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),

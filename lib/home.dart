@@ -19,7 +19,7 @@ class _HomeState extends State<Home> {
 
   List<IconData> iconList = [
     Icons.home,
-    Icons.search,
+    Icons.access_alarms_rounded,
     Icons.notifications,
     Icons.settings,
   ];

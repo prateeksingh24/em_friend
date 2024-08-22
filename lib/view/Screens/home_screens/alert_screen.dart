@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:em_friend/utilities/live_location.dart';
 import 'package:em_friend/utilities/route_map.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,6 @@ class _SOSScreenState extends State<SOSScreen> {
       if (_sosSignal) {
         timer.cancel();
       }
-      print('object');
     });
   }
 
@@ -74,7 +74,26 @@ class _SOSScreenState extends State<SOSScreen> {
                   _sosSignal = true;
                   Position _currentPos =
                       await LiveLocation().getCurrentLocation();
-                  LatLng dest = LatLng(28.3642546499153, 75.60845071623878);
+                  final _firestore = FirebaseFirestore.instance;
+                  print('object 123');
+                  final doc = await _firestore
+                      .collection("EMSignal")
+                      .doc('Emergency')
+                      .get();
+                  print('object 456');
+                  final data = doc.data()!;
+                  final docDest = await _firestore
+                      .collection('Users')
+                      .doc(data['uid'])
+                      .get();
+                  print(docDest);
+                  print('object 567');
+
+                  // final dataUser = docDest.data();
+                  // print(dataUser);
+                  // final GeoPoint destination = dataUser!['liveLocation'];
+                  // print('object 123');25.067096630093186, 75.79820563885629
+                  LatLng dest = LatLng(25.067096630093186, 75.79820563885629);
                   Navigator.of(context).push(
                     MaterialPageRoute(
                       builder: (ctx) => RoutePage(

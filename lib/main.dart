@@ -5,6 +5,7 @@ import 'package:em_friend/utilities/live_location.dart';
 import 'package:em_friend/utilities/route_map.dart';
 import 'package:em_friend/view/Screens/Forms/generalInfo.dart';
 import 'package:em_friend/view/Screens/auth/login_screen.dart';
+import 'package:em_friend/view/Screens/auth/onboarding_screen.dart'; 
 import 'package:em_friend/view/Screens/auth/signup_screeen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,12 +41,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: '/loginScreen',
+      initialRoute: '/onBoarding',
       routes: {
         '/home': (context) => Home(),
         '/loginScreen': (context) => LoginScreen(),
         '/signUpScreen': (context) => SignUpScreen(),
         '/infoForm': (context) => GeneralInfoForm(),
+        '/onBoarding': (context) => OnboardingScreen(),
       },
     );
   }
